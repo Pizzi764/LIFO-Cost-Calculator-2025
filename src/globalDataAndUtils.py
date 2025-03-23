@@ -25,9 +25,10 @@ WALLET_HEADERS_ROW = 7
 CURRENCY_SYMBOL_ROW = 8
 
 FIRST_DATA_ROW = 9
-LAST_DATA_ROW = 376
+LAST_DATA_ROW = 384
 
 TIMESTAMP_COLUMN = excel_column_to_index("B")
+FISCAL_RELEVANCE_COLUMN = excel_column_to_index("D")
 REF_ID_COLUMN = excel_column_to_index("C")
 TX_TYPE_COLUMN = excel_column_to_index("F")
 

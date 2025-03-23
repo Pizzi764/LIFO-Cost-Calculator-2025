@@ -65,19 +65,24 @@ class TxTable:
 
         # Itera sul DataFrame dalle righe FIRST_DATA_ROW alla riga LAST_DATA_ROW
         for index, raw_row_data in self.df.iloc[FIRST_DATA_ROW - 1:LAST_DATA_ROW].iterrows():
-            print(f"Processing row index: {index}")  # Aggiungi questo per debug
-            # comincio a costruire la riga
+            # Costruisci la transazione
             transaction = Tx(index + 1, raw_row_data)
 
-            # ora prendo i dati grezzi dalle colonne e li vado a valutare in base al tipo di TX modificando gli elementi di transaction
+            # Parsifica i dati e modifica la transazione
             self.__parse_data_to_cost_elements(raw_row_data, transaction)
 
-            # riporto il costo nel file excel
+            # Riporta il costo nella colonna COST_COLUMN
             self.df.at[index, COST_COLUMN] = transaction.cost
-            # Save the updated DataFrame back to the Excel file
-            self.df.to_excel(EXCEL_FILE_PATH, SHEET_NAME, index=False, header=False)
 
+            # Scrivi la rilevanza fiscale nella colonna FISCAL_RELEVANCE_COLUMN
+            if transaction.fiscal_relevance:
+                self.df.at[index, FISCAL_RELEVANCE_COLUMN] = "SI"  # O 1, se preferisci un numero
+            
             transactions.append(transaction)
+
+        # Salva il DataFrame aggiornato nel file Excel (fuori dal ciclo)
+        self.df.to_excel(EXCEL_FILE_PATH, SHEET_NAME, index=False, header=False)
+        
         return transactions
 
     # va a definire l'instradamento dei costi a seconda del tipo di TX
@@ -236,7 +241,7 @@ class TxTable:
         # se la transazione è di tipo EXCHANGE, la valuta di destinazione è "USD" o "EUR"
         # e la valuta di destinazione è diversa dalla valuta di origine
         if (transaction.tx_type == TxType.EXCHANGE.name and
-                destination_wallet.symbol in ["USD", "EUR"] and
+                destination_wallet.symbol in ["USD", "EUR", "USDC"] and
                 destination_wallet.symbol != source_wallet.symbol):
             transaction.fiscal_relevance = True
 
