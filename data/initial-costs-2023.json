@@ -1,0 +1,23 @@
+[
+    {
+        "wallet_name": "BTC Ledger",
+        "symbol": "BTC",
+        "cost_elements": [
+            {"timestamp": "01-01-23 00:00", "quantity": 3.5892194, "cost": 55682.04, "symbol": "BTC"}
+        ]
+    },
+    {
+        "wallet_name": "USDC Ledger",
+        "symbol": "USDC",
+        "cost_elements": [
+            {"timestamp": "01-01-23 00:00", "quantity": 400129, "cost": 375144.38, "symbol": "USDC"}
+        ]
+    },
+    {
+        "wallet_name": "CRO App",
+        "symbol": "CRO",
+        "cost_elements": [
+            {"timestamp": "01-01-23 00:00", "quantity": 52667, "cost": 2937.92, "symbol": "CRO"}
+        ]
+    }
+]

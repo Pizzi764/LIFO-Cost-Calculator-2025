@@ -16,12 +16,11 @@ def excel_column_to_index(column_str):
 # Log level (set to DEBUG)
 LOG_LEVEL = logging.DEBUG
 
-EXCEL_FILE_PATH = 'data/2023TaxReport.xlsx'
+EXCEL_FILE_PATH = 'data/TX2024-corretto.xlsx'
+INITAL_DATA_FILE_PATH = 'data/initial-costs-2024.json'
 SHEET_NAME = 'Transazioni'
 
 FISCAL_YEAR = 2023
-INITIAL_COSTS_ROW = 1
-INITIAL_QUANTITY_ROW = 2
 WALLET_HEADERS_ROW = 7
 CURRENCY_SYMBOL_ROW = 8
 

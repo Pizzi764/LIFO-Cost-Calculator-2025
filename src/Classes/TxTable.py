@@ -1,6 +1,7 @@
 import logging
 import math
 import sys
+import json
 from typing import List
 
 import numpy as np
@@ -25,7 +26,7 @@ class TxTable:
         self.wallets = self.__init_wallets()  # Wallets
         self.transactions: List[Tx] = self.__init_load_transactions()  # crea le transazioni con dentro gli oggetti di costo
 
-    # Inizializza i Wallets con i valori iniziali dei costi
+    # Inizializza i Wallets leggendo le intestazioni delle colonne della tabella
     def __init_wallets(self):
 
         # Inizializza una lista locale per memorizzare i wallets
@@ -34,14 +35,10 @@ class TxTable:
         # leggiamo le righe di nome, simbolo e valori iniziali
         names = self.df.iloc[WALLET_HEADERS_ROW - 1]
         symbols = self.df.iloc[CURRENCY_SYMBOL_ROW - 1]
-        initQuants = self.df.iloc[INITIAL_QUANTITY_ROW - 1]
-        initCosts = self.df.iloc[INITIAL_COSTS_ROW - 1]
 
-        for col, (name, symbol, initQuant, initCost) in enumerate(
+        for col, (name, symbol) in enumerate(
                 zip(names[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1],
-                    symbols[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1],
-                    initQuants[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1],
-                    initCosts[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1])):
+                    symbols[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1])):
 
             # Inizializza il wallet con nome... se c'è anche il simbolo della currency mettilo altrimenti ""
             if isinstance(symbol, float) and math.isnan(symbol):
@@ -49,12 +46,9 @@ class TxTable:
             table_column = FIRST_TX_DATA_COLUMN+col
             wallet = Wallet(table_column, name, symbol)
 
-            date1stDayYr = datetime(FISCAL_YEAR, 1, 1)
-            # Controlla se initQuant e initCost sono numeri validi e li pusha in un nuovo cost element
-            if isinstance(initQuant, (int, float)) and isinstance(initCost, (int, float)) and not math.isnan(
-                    initQuant) and not math.isnan(initCost):
-                new_cost_elem = CostElement(date1stDayYr, initQuant, symbol, initCost, table_column)
-                wallet.push_cost_element(new_cost_elem)
+            #qui ora dobbiamo inserire il codice che va a leggere da un file json rappresentante 
+            #le bag di costo del precedente anno per i calcoli LIFO
+            pushInitDataIfAny(wallet)
 
             result_wallets.append(wallet)
 
@@ -273,3 +267,52 @@ class TxTable:
                 print(transaction)
         print(f"Somma delle quantità per le transazioni CASH_IN: {total_cash_in_quantity}")
         return total_cash_in_quantity
+    
+
+
+def pushInitDataIfAny(wallet):
+    """
+    Legge i dati iniziali da un file JSON e li pusha nel wallet in ordine cronologico crescente,
+    se esistono.
+    
+    Args:
+        wallet: Oggetto Wallet in cui pushare i CostElement iniziali.
+    """
+    try:
+        # Apertura del file JSON
+        with open(INITAL_DATA_FILE_PATH, 'r') as file:
+            data = json.load(file)
+        
+        # Cerca il wallet nel JSON usando il nome
+        for wallet_data in data:
+            if wallet_data["wallet_name"] == wallet.name:
+                # Trovato il wallet, ora processiamo i cost_elements
+                cost_elements = wallet_data["cost_elements"]
+                
+                # Ordina i cost_elements per timestamp in ordine crescente
+                sorted_elements = sorted(
+                    cost_elements,
+                    key=lambda x: datetime.strptime(x["timestamp"], "%d-%m-%y %H:%M")
+                )
+                
+                # Inserisci gli elementi ordinati nel wallet
+                for element in sorted_elements:
+                    # Converti il timestamp in oggetto datetime
+                    timestamp = datetime.strptime(element["timestamp"], "%d-%m-%y %H:%M")
+                    quantity = element["quantity"]
+                    cost = element["cost"]
+                    symbol = element["symbol"]
+                    
+                    # Crea un nuovo CostElement
+                    cost_element = CostElement(timestamp, quantity, symbol, cost, wallet.column)
+                    
+                    # Pusha il CostElement nel wallet
+                    wallet.push_cost_element(cost_element)
+                break  # Esci dal ciclo una volta trovato il wallet
+                
+    except FileNotFoundError:
+        print(f"File JSON {INITAL_DATA_FILE_PATH} non trovato. Nessun dato iniziale caricato per {wallet.name}.")
+    except json.JSONDecodeError:
+        print(f"Errore nel parsing del file JSON {INITAL_DATA_FILE_PATH}.")
+    except Exception as e:
+        print(f"Errore durante il caricamento dei dati iniziali per {wallet.name}: {str(e)}")
