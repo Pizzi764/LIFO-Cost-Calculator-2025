@@ -18,7 +18,14 @@
         ]
     },
     {
-        "wallet_name": "Ledger ETH 2024",
+        "wallet_name": "ETH Ledger 0x28",
+        "symbol": "ETH",
+        "cost_elements": [
+            {"timestamp": "29-12-23 10:11", "quantity": 0.043, "cost": 0, "symbol": "ETH"}
+        ]
+    },
+    {
+        "wallet_name": "ETH Ledger 0x04",
         "symbol": "ETH",
         "cost_elements": [
             {"timestamp": "29-12-23 10:11", "quantity": 15.32790000, "cost": 28531.31, "symbol": "ETH"}
@@ -28,7 +35,7 @@
         "wallet_name": "Bitget XRP",
         "symbol": "XRP",
         "cost_elements": [
-            {"timestamp": "31-12-23 23:59", "quantity": 881.33, "cost": 0.00, "symbol": "XRP"}
+            {"timestamp": "31-12-23 23:59", "quantity": 881.3321, "cost": 0.00, "symbol": "XRP"}
         ]
     },
     {

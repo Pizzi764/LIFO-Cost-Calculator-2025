@@ -17,16 +17,25 @@ def get_historical_price_EUR(symbol, date):
     # Array di dati storici (data, valore, simbolo)
     historical_data = [
         # Valori al 31-12-2023
-        {"date": "2023-12-31", "value": 38230, "symbol": "₿"},
-        {"date": "2023-12-31", "value": 2063.65, "symbol": "Ξ"},
+        {"date": "2023-12-31", "value": 38230, "symbol": "BTC"},
+        {"date": "2024-12-31", "value": 89686.59, "symbol": "BTC"},
+        {"date": "2023-12-31", "value": 2063.65, "symbol": "ETH"},
+        {"date": "2024-12-31", "value": 3202.60, "symbol": "ETH"},
         {"date": "2023-12-31", "value": 0.08949, "symbol": "CRO"},
+        {"date": "2024-12-31", "value": 0.1355, "symbol": "CRO"},
         {"date": "2023-12-31", "value": 0.5562, "symbol": "XRP"},
         {"date": "2023-12-31", "value": 0.9043, "symbol": "USDT"},
         {"date": "2023-12-31", "value": 0.9046, "symbol": "USDC"},
         {"date": "2023-12-31", "value": 1.4067, "symbol": "ARB"},
+        {"date": "2024-12-31", "value": 296.61, "symbol": "AAVE"},
+        {"date": "2024-12-31", "value": 1.84, "symbol": "SNX"},
+        {"date": "2024-12-31", "value": 12.70, "symbol": "UNI"},
+        {"date": "2024-12-31", "value": 4.3035, "symbol": "RUNE"},
+        {"date": "2024-12-31", "value": 26.05, "symbol": "GMX"},
+
 
         # Altri valori che servono per TX Fiscalmente rilevanti
-        {"date": "2023-12-09", "value": 40586.46, "symbol": "₿"}
+        {"date": "2023-12-09", "value": 40586.46, "symbol": "BTC"}
 
     ]
 
@@ -39,8 +48,8 @@ def get_historical_price_EUR(symbol, date):
             return data_point["value"]
 
     # Solleva un'eccezione se non trova corrispondenze
-    raise ValueError(f"Nessun dato storico trovato per il simbolo {symbol} e la data {target_date}")
-
+    #raise ValueError(f"Nessun dato storico trovato per il simbolo {symbol} e la data {target_date}")
+    return 0
 
 
     """

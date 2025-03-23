@@ -19,6 +19,7 @@ class TxType(Enum):
     INTEREST = 'INTEREST'
     CASH_OUT = 'CASH_OUT'
     CASH_IN = 'CASH_IN'
+    COST = 'COST'
 
 class Tx:
     def __init__(self, row_number, row_data):

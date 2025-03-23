@@ -20,20 +20,20 @@ EXCEL_FILE_PATH = 'data/TX2024-corretto.xlsx'
 INITAL_DATA_FILE_PATH = 'data/initial-costs-2024.json'
 SHEET_NAME = 'Transazioni'
 
-FISCAL_YEAR = 2023
+FISCAL_YEAR = 2024
 WALLET_HEADERS_ROW = 7
 CURRENCY_SYMBOL_ROW = 8
 
 FIRST_DATA_ROW = 9
-LAST_DATA_ROW = 180 # su 177
+LAST_DATA_ROW = 376
 
 TIMESTAMP_COLUMN = excel_column_to_index("B")
 REF_ID_COLUMN = excel_column_to_index("C")
 TX_TYPE_COLUMN = excel_column_to_index("F")
 
 FIRST_TX_DATA_COLUMN = excel_column_to_index("G")
-LAST_TX_DATA_COLUMN = excel_column_to_index("AN")
-TX_COMMENT_COLUMN = excel_column_to_index("AP")
+LAST_TX_DATA_COLUMN = excel_column_to_index("BX")
+TX_COMMENT_COLUMN = excel_column_to_index("BY")
 COST_COLUMN = excel_column_to_index("E")
 
 global global_wallets  # viene linkato dalla TxTable al momento della init

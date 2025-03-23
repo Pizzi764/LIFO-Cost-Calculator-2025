@@ -65,8 +65,9 @@ class TxTable:
 
         # Itera sul DataFrame dalle righe FIRST_DATA_ROW alla riga LAST_DATA_ROW
         for index, raw_row_data in self.df.iloc[FIRST_DATA_ROW - 1:LAST_DATA_ROW].iterrows():
+            print(f"Processing row index: {index}")  # Aggiungi questo per debug
             # comincio a costruire la riga
-            transaction = Tx(index+1, raw_row_data)
+            transaction = Tx(index + 1, raw_row_data)
 
             # ora prendo i dati grezzi dalle colonne e li vado a valutare in base al tipo di TX modificando gli elementi di transaction
             self.__parse_data_to_cost_elements(raw_row_data, transaction)
@@ -111,6 +112,8 @@ class TxTable:
         elif TxType(transaction.tx_type) == TxType.PNL:
             self.__parse_PNL(transferred_values, transaction)
 
+        elif TxType(transaction.tx_type) == TxType.COST:
+            self.__parse_PNL(transferred_values, transaction)
 
         elif transaction.tx_type in [TxType.AIRDROP.name, TxType.INTEREST.name]:
             self.__parse_single_positive(transferred_values, 0, transaction, False)
@@ -140,7 +143,7 @@ class TxTable:
             else: # qui son per forza € (si potrebbe fare un controllo e generare una eccezione se non teli
                 transaction.EURvalue = transaction.cost_element_in.quantity
         # aggiunta del commento dalla riga apposita
-        transaction.comment = raw_row_data[TX_COMMENT_COLUMN]
+        # transaction.comment = raw_row_data[TX_COMMENT_COLUMN]
 
         logging.debug(transaction)
         logging.debug("*****************  TX END  ******************")
