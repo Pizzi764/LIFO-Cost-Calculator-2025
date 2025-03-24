@@ -20,11 +20,6 @@ while True:
     
     if command == "print":
         table.print_relevant_transactions()
-    elif command == "cashin":
-        table.sum_and_print_cash_in_transactions()
-    elif command == "eoy":
-        days = int(input("Inserisci il numero di giorni per EOY (es. 370): "))
-        print_current_EOY_non_zero_wallets(days)
     elif command == "exit":
         print("Uscita dal programma.")
         break
