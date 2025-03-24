@@ -92,33 +92,50 @@ except ValueError:
     return historical_price
     '''
 
-def get_EURUSD_exchange_rate(data):
+import requests
+import datetime
+import logging
+import csv
+from io import StringIO
+
+def get_EURUSD_exchange_rate(data, attempts=5):
     """
-        Ottiene il tasso di cambio EUR/USD per una data specifica.
+    Ottiene il tasso di cambio EUR/USD per una data specifica (1 EUR = X USD).
 
-        Args:
-            data (datetime.date): La data per la quale si desidera ottenere il tasso di cambio.
+    Args:
+        data (datetime.date): La data per la quale si desidera ottenere il tasso di cambio.
+        attempts (int): Numero massimo di giorni precedenti da provare.
 
-        Returns:
-            float or None: Il tasso di cambio EUR/USD per la data specificata, o None se non è disponibile.
+    Returns:
+        float or None: Il tasso di cambio EUR/USD per la data specificata, o None se non disponibile.
     """
     ref_date = data.strftime("%Y-%m-%d")
-    url = f"https://tassidicambio.bancaditalia.it/terzevalute-wf-web/rest/v1.0/dailyRates?referenceDate={ref_date}&baseCurrencyIsoCode=USD&currencyIsoCode=EUR"
+    url = f"https://tassidicambio.bancaditalia.it/terzevalute-wf-web/rest/v1.0/dailyRates?referenceDate={ref_date}&baseCurrencyIsoCode=USD&currencyIsoCode=EUR"  # Nota il '&'
 
     try:
         response = requests.get(url)
         response.raise_for_status()
-
-        # Parse della risposta come CSV
+        
+        # Log della risposta grezza
+        logging.debug(f"Risposta grezza per {ref_date}: {response.text}")
+        
+        # Parse come CSV
         reader = csv.DictReader(StringIO(response.text))
         for row in reader:
-            rate = float(row['Quotazione'])
-            if rate is not None:
-                return rate
-    except requests.exceptions.RequestException as e:
-        print("BDI RestAPI errore nella richiesta provando a recuperare il tasso di cambio EURO/USD:", e)
-        return None
+            eur_usd_rate = float(row["Quotazione"])  # 1 EUR = X USD
+            logging.debug(f"Tasso di cambio EUR/USD per {ref_date}: {eur_usd_rate:.6f}")
+            return eur_usd_rate
 
-    # Se il tasso è None, prova a recuperare il tasso del giorno precedente in modo ricorsivo
-    previous_day = data - datetime.timedelta(days=1)
-    return get_EURUSD_exchange_rate(previous_day)
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Errore nella richiesta del tasso di cambio EUR/USD per {ref_date}: {e}")
+    except (ValueError, KeyError) as e:
+        logging.error(f"Errore nel parsing del CSV per {ref_date}: {e}")
+
+    # Fallback al giorno precedente con limite
+    if attempts > 0:
+        previous_day = data - datetime.timedelta(days=1)
+        logging.debug(f"Tasso non trovato per {ref_date}, provo il giorno precedente: {previous_day.strftime('%Y-%m-%d')}")
+        return get_EURUSD_exchange_rate(previous_day, attempts - 1)
+    else:
+        logging.error(f"Impossibile ottenere il tasso EUR/USD dopo {attempts} tentativi")
+        return None
