@@ -19,7 +19,6 @@ sys.path.append('../')
 from globalDataAndUtils import *
 from Classes.Tx import Tx
 
-
 class TxTable:
     def __init__(self):
         self.df = pd.read_excel(EXCEL_FILE_PATH, SHEET_NAME, header=None)

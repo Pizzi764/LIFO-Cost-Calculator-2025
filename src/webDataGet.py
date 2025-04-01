@@ -75,18 +75,25 @@ def get_EURUSD_exchange_rate(data, attempts=5):
         
         logging.debug(f"Risposta grezza per {ref_date}: {response.text}")
         
+        # Verifica se la risposta è un CSV valido
+        if "Quotazione" not in response.text or "DISCLAIMER" in response.text.upper():
+            logging.warning(f"Risposta per {ref_date} non contiene dati CSV validi, probabilmente un disclaimer.")
+            raise ValueError("Risposta non valida, nessun dato CSV disponibile")
+
         reader = csv.DictReader(StringIO(response.text))
         for row in reader:
-            eur_usd_rate = float(row["Quotazione"])  # 1 EUR = X USD
-            logging.debug(f"Tasso di cambio EUR/USD per {ref_date}: {eur_usd_rate:.6f}")
-            save_exchange_rate_to_cache(ref_date, eur_usd_rate)  # Salva nella cache
-            return eur_usd_rate
+            if "Quotazione" in row and row["Quotazione"]:
+                eur_usd_rate = float(row["Quotazione"])  # 1 EUR = X USD
+                logging.debug(f"Tasso di cambio EUR/USD per {ref_date}: {eur_usd_rate:.6f}")
+                save_exchange_rate_to_cache(ref_date, eur_usd_rate)  # Salva nella cache
+                return eur_usd_rate
+            else:
+                logging.error(f"Campo 'Quotazione' mancante o vuoto nella risposta per {ref_date}")
+                raise KeyError("Campo 'Quotazione' non trovato")
 
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Errore nella richiesta del tasso di cambio EUR/USD per {ref_date}: {e}")
-    except (ValueError, KeyError) as e:
-        logging.error(f"Errore nel parsing del CSV per {ref_date}: {e}")
-
+    except (requests.exceptions.RequestException, ValueError, KeyError) as e:
+        logging.error(f"Errore nella richiesta o parsing del tasso di cambio EUR/USD per {ref_date}: {e}")
+    
     # Fallback al giorno precedente
     if attempts > 0:
         previous_day = data - datetime.timedelta(days=1)
