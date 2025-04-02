@@ -3,19 +3,15 @@ import math
 import sys
 import json
 from typing import List
-
 import numpy as np
 import pandas as pd
-
 import globalDataAndUtils
 from datetime import datetime
 from Classes.CostElement import CostElement
 from Classes.Wallet import Wallet
 from Classes.Tx import TxType
 from webDataGet import get_historical_price_EUR, get_EURUSD_exchange_rate
-
 sys.path.append('../')
-
 from globalDataAndUtils import *
 from Classes.Tx import Tx
 
@@ -29,7 +25,6 @@ class TxTable:
         result_wallets = []
         names = self.df.iloc[WALLET_HEADERS_ROW - 1]
         symbols = self.df.iloc[CURRENCY_SYMBOL_ROW - 1]
-
         for col, (name, symbol) in enumerate(
                 zip(names[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1],
                     symbols[FIRST_TX_DATA_COLUMN:LAST_TX_DATA_COLUMN + 1])):
@@ -39,10 +34,8 @@ class TxTable:
             wallet = Wallet(table_column, name, symbol)
             pushInitDataIfAny(wallet)
             result_wallets.append(wallet)
-
         specialEURwallet = Wallet(-1, "SpentEUR", "EUR")
         result_wallets.append(specialEURwallet)
-
         globalDataAndUtils.global_wallets = result_wallets
         return result_wallets
 
@@ -61,13 +54,15 @@ class TxTable:
     def __parse_value_transfer(self, values, transaction):
         source_wallet = find_wallet_by_column(values[0][1])
         destination_wallet = find_wallet_by_column(values[1][1])
-
-        transaction.cost_element_out = source_wallet.extract(-values[0][0], transaction.timestamp)
+        extract_result = source_wallet.extract(-values[0][0], transaction.timestamp)
+        transaction.cost_element_out = extract_result["extracted"]
+        transaction.original_cost_elements = extract_result["original_elements"]
+        transaction.remaining_cost_element = extract_result["remaining"]
         
         if transaction.tx_type == TxType.EXCHANGE.name and destination_wallet.symbol in ["USD", "EUR", "USDC"]:
             if destination_wallet.symbol == "EUR":
                 cost_in_eur = values[1][0]
-                transaction.exchange_rate = 1.0  # Nessun tasso per EUR
+                transaction.exchange_rate = 1.0
             else:
                 rate = get_EURUSD_exchange_rate(transaction.timestamp)
                 if rate is None:
@@ -76,7 +71,7 @@ class TxTable:
                     transaction.exchange_rate = None
                 else:
                     cost_in_eur = values[1][0] / rate
-                    transaction.exchange_rate = rate  # Salva il tasso
+                    transaction.exchange_rate = rate
         else:
             cost_in_eur = transaction.cost_element_out.cost
             transaction.exchange_rate = None
@@ -101,14 +96,10 @@ class TxTable:
             if isinstance(value, (int, float)) and not np.isnan(value):
                 transferred_values.append((value, col))
         transferred_values.sort()
-
         if len(transferred_values) == 0:
             raise ValueError("No transferred values found")
         elif len(transferred_values) > 2:
             raise ValueError("More than 2 transferred values are not allowed")
-
-        logging.debug("***************** TX BEGIN ******************")
-
         if TxType(transaction.tx_type) == TxType.TRANSFER:
             self.__parse_value_transfer(transferred_values, transaction)
         elif TxType(transaction.tx_type) == TxType.EXCHANGE:
@@ -127,10 +118,9 @@ class TxTable:
             self.__parse_single_negative(transferred_values, transaction, True)
         else:
             raise ValueError("Unknown transaction type: {}".format(transaction.tx_type))
-
-        logging.debug(transaction)
-        logging.debug("*****************  TX END  ******************")
-        logging.debug("")
+        output = str(transaction) + "\n\n"
+        print(output, end="")
+        logging.info(output)
 
     def __parse_single_positive(self, values, cost, transaction, fiscal_relevance=False):
         wallet = find_wallet_by_column(values[0][1])
@@ -181,13 +171,11 @@ class TxTable:
                 else:
                     print(f"Minus {formatted_profit}€ : {transaction}, proceeds={transaction.cost:.2f}€, basis={transaction.cost_element_out.cost:.2f}€, {rate_str}")
                 total_profit += profit
-
         formatted_total_profit = "{:.2f}".format(abs(total_profit))
         print(f"\nSomma totale delle plusvalenze/minusvalenze: {formatted_total_profit} euro")
         tax = max(total_profit, 0) * 0.26
         formatted_tax = "{:.2f}".format(abs(tax))
         print(f"Tassa sulle plusvalenze (26%): {formatted_tax} euro")
-
 
 def pushInitDataIfAny(wallet):
     try:
