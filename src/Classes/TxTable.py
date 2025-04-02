@@ -159,22 +159,39 @@ class TxTable:
         transaction.fiscal_relevance = False
 
     def print_relevant_transactions(self):
+        headers = ["N° Tx", "Data", "Asset Venduto", "Asset Acquistato", "Costo (€)", "Ricavo (€)", "Plus/Minus (€)", "Tasso EUR/USD"]
+        col_widths = [6, 15, 20, 20, 12, 12, 15, 12]
+        
+        # Stampa intestazione
+        header_row = "".join(f"{header:<{width}}" for header, width in zip(headers, col_widths))
+        print(header_row)
+        print("-" * len(header_row))
+        
         total_profit = 0
-        print("Transazioni rilevanti:")
-        for index, transaction in enumerate(self.transactions, start=1):
-            if transaction.fiscal_relevance:
-                profit = transaction.cost - transaction.cost_element_out.cost
-                formatted_profit = "{:.2f}".format(abs(profit))
-                rate_str = f"EUR/USD={transaction.exchange_rate:.4f}" if transaction.exchange_rate else "EUR/USD=N/A"
-                if profit >= 0:
-                    print(f"Plusv {formatted_profit}€ : {transaction}, proceeds={transaction.cost:.2f}€, basis={transaction.cost_element_out.cost:.2f}€, {rate_str}")
-                else:
-                    print(f"Minus {formatted_profit}€ : {transaction}, proceeds={transaction.cost:.2f}€, basis={transaction.cost_element_out.cost:.2f}€, {rate_str}")
+        for tx in self.transactions:
+            if tx.fiscal_relevance:
+                profit = tx.cost - tx.cost_element_out.cost
                 total_profit += profit
-        formatted_total_profit = "{:.2f}".format(abs(total_profit))
-        print(f"\nSomma totale delle plusvalenze/minusvalenze: {formatted_total_profit} euro")
+                
+                tx_num = f"{tx.row_number}"
+                date = tx.timestamp.strftime("%d-%m-%y %H:%M")
+                sold = f"{tx.cost_element_out.quantity:.2f} {tx.cost_element_out.symbol}"
+                bought = f"{tx.cost_element_in.quantity:.2f} {tx.cost_element_in.symbol}"
+                cost = f"{tx.cost_element_out.cost:.2f}"
+                proceeds = f"{tx.cost:.2f}"
+                plus_minus = f"{'+' if profit >= 0 else '-'}{abs(profit):.2f}"
+                rate = f"{tx.exchange_rate:.4f}" if tx.exchange_rate else "N/A"
+                
+                row = [
+                    tx_num, date, sold, bought, cost, proceeds, plus_minus, rate
+                ]
+                print("".join(f"{field:<{width}}" for field, width in zip(row, col_widths)))
+        
+        print("\n")
+        formatted_total_profit = "{:.2f}".format(total_profit)
+        print(f"Somma totale delle plusvalenze/minusvalenze: {formatted_total_profit} euro")
         tax = max(total_profit, 0) * 0.26
-        formatted_tax = "{:.2f}".format(abs(tax))
+        formatted_tax = "{:.2f}".format(tax)
         print(f"Tassa sulle plusvalenze (26%): {formatted_tax} euro")
 
 def pushInitDataIfAny(wallet):

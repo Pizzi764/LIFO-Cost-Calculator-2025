@@ -4206,3 +4206,74 @@ Tx:384 [EXCHANGE] @ 20-12-24 11:25
   Riepilogo: Q:7500.00000000 USDT -> Q:26.01300000 AAVE, Costo: 5142.06622500€
 
 
+Prezzo storico trovato in cache per BTC il 2024-12-31: 89686.59
+Prezzo storico trovato in cache per BTC il 2024-12-31: 89686.59
+Nessun dato storico trovato per R il 2024-12-31, restituisco 0
+Prezzo storico trovato in cache per BTC il 2024-12-31: 89686.59
+Prezzo storico trovato in cache per BTC il 2024-12-31: 89686.59
+Prezzo storico trovato in cache per BTC il 2024-12-31: 89686.59
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDC il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per MIM il 2024-12-31, restituisco 0
+Nessun dato storico trovato per  il 2024-12-31, restituisco 0
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Prezzo storico trovato in cache per ETH il 2024-12-31: 3202.6
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Tasso EUR/USD trovato in cache per 2024-12-31: 1.0389
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per USDT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per ZK il 2024-12-31, restituisco 0
+Nessun dato storico trovato per XRP il 2024-12-31, restituisco 0
+Nessun dato storico trovato per CRO
+App il 2024-12-31, restituisco 0
+Prezzo storico trovato in cache per AAVE il 2024-12-31: 296.61
+Prezzo storico trovato in cache per GMX il 2024-12-31: 26.05
+Prezzo storico trovato in cache per RUNE il 2024-12-31: 4.3035
+Prezzo storico trovato in cache per SNX il 2024-12-31: 1.84
+Prezzo storico trovato in cache per UNI il 2024-12-31: 12.7
+Nessun dato storico trovato per ATOM il 2024-12-31, restituisco 0
+Nessun dato storico trovato per ATOM il 2024-12-31, restituisco 0
+Nessun dato storico trovato per DYM il 2024-12-31, restituisco 0
+Prezzo storico trovato in cache per SNX il 2024-12-31: 1.84
+Nessun dato storico trovato per AKT il 2024-12-31, restituisco 0
+Nessun dato storico trovato per KUJI il 2024-12-31, restituisco 0
+Nessun dato storico trovato per OPFLOW il 2024-12-31, restituisco 0
+Nessun dato storico trovato per ALPH il 2024-12-31, restituisco 0
+Nessun dato storico trovato per BLOCX il 2024-12-31, restituisco 0
+Nessun dato storico trovato per METAL il 2024-12-31, restituisco 0
+Nessun dato storico trovato per METIS il 2024-12-31, restituisco 0
+Nessun dato storico trovato per MTRG il 2024-12-31, restituisco 0
+Nessun dato storico trovato per XWG il 2024-12-31, restituisco 0
+Nessun dato storico trovato per NAKA il 2024-12-31, restituisco 0
+Nessun dato storico trovato per RIO il 2024-12-31, restituisco 0
+Nessun dato storico trovato per FXS il 2024-12-31, restituisco 0
+Nessun dato storico trovato per FET il 2024-12-31, restituisco 0
+Nessun dato storico trovato per SEI il 2024-12-31, restituisco 0
+Nessun dato storico trovato per DYDX il 2024-12-31, restituisco 0
+Nessun dato storico trovato per PYTH il 2024-12-31, restituisco 0
+Nessun dato storico trovato per PENDLE il 2024-12-31, restituisco 0
+Nessun dato storico trovato per PIXEL il 2024-12-31, restituisco 0
+Nessun dato storico trovato per BONK il 2024-12-31, restituisco 0
+Nessun dato storico trovato per MEME il 2024-12-31, restituisco 0
+Nessun dato storico trovato per MOCHI il 2024-12-31, restituisco 0
+Nessun dato storico trovato per PEPE il 2024-12-31, restituisco 0
+Nessun dato storico trovato per WIF il 2024-12-31, restituisco 0
+Nessun dato storico trovato per FLOKI il 2024-12-31, restituisco 0
